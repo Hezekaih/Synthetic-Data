@@ -1,0 +1,33 @@
+import csv
+from faker import Faker
+import random
+from datetime import datetime, timedelta
+
+# Initialize Faker and seed for reproducibility
+faker = Faker()
+Faker.seed(42)
+random.seed(42)
+
+# Create a list to store the data
+data = []
+
+# Generate 150 rows of data
+for _ in range(150):
+    candidate_name = faker.name()
+    position_applied = random.choice(['Developer', 'Designer', 'Manager', 'Data Analyst'])
+    date_applied = faker.date_between(start_date='-1y', end_date='today')
+    interview_rating = random.randint(1, 5)
+    offer_status = random.choice(['Accepted', 'Rejected'])
+    if offer_status == 'Accepted':
+        joining_date = date_applied + timedelta(days=random.randint(7, 30))
+    else:
+        joining_date = None
+    data.append([candidate_name, position_applied, date_applied, interview_rating, offer_status, joining_date])
+
+# Save data to a CSV file
+with open('talent_acquisition_data.csv', 'w', newline='', encoding='utf-8') as file:
+    writer = csv.writer(file)
+    writer.writerow(['Candidate Name', 'Position Applied', 'Date Applied', 'Interview Rating', 'Offer Status', 'Joining Date'])
+    writer.writerows(data)
+
+print("Data generated and saved to 'talent_acquisition_data.csv'")
